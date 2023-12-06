@@ -1,12 +1,27 @@
 "use client";
+import { addAnswer } from "@/app/redux/slices/quiz";
 import { questions } from "@/app/utils/constant";
 import { Heading } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const QuizDetail = () => {
   const [index, setIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
   const currentQuestion: QuizQuestion = questions[index];
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleNext = () => {
+    dispatch(addAnswer({ ...currentQuestion, userAnswer: selectedOption }));
+    setIndex((prev) => prev + 1);
+  };
+
+  const handleSubmit = () => {
+    router.push("/submitted");
+  };
 
   return (
     <div className="bg-slate-100 mx-4 mt-10 px-4 py-6 rounded-md">
@@ -34,12 +49,11 @@ const QuizDetail = () => {
           </button>
         )}
         {index === questions.length - 1 ? (
-          <button className="btn-grad mt-4 ml-auto w-24">Submit</button>
+          <button className="btn-grad mt-4 ml-auto w-24" onClick={handleSubmit}>
+            Submit
+          </button>
         ) : (
-          <button
-            className="btn-grad mt-4 ml-auto w-24"
-            onClick={() => setIndex((prev) => prev + 1)}
-          >
+          <button className="btn-grad mt-4 ml-auto w-24" onClick={handleNext}>
             Next
           </button>
         )}

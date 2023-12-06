@@ -5,7 +5,7 @@ type ResponseData = {
   message: string;
 };
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  console.log("hello");
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
+  const { email, password } = req.body;
   return NextResponse.json({ message: "Hello from Next.js!" });
 }
