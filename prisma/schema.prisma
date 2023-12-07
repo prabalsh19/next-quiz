@@ -24,3 +24,18 @@ model User {
   password String
   role Role @default(student)
 }
+
+model Question{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  question String
+  options String[]
+  correctAnswer String
+  quizId String @db.ObjectId
+  quiz Quiz @relation(fields: [quizId],references: [id])
+}
+
+model Quiz{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  questions Question[]
+  active Boolean @default(false)
+}

@@ -2,6 +2,7 @@ import prisma from "@/app/utils/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export const POST = async (req: Request, res: NextApiResponse) => {
   try {
@@ -18,8 +19,10 @@ export const POST = async (req: Request, res: NextApiResponse) => {
       );
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const createdUser = await prisma.user.create({
-      data: { firstName, lastName, email, password },
+      data: { firstName, lastName, email, password: hashedPassword },
     });
 
     const token = jwt.sign(
@@ -41,6 +44,7 @@ export const POST = async (req: Request, res: NextApiResponse) => {
       {
         success: false,
         message: "Internal Server Error",
+        error: e,
       },
       { status: 500 }
     );
