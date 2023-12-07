@@ -4,3 +4,9 @@ type QuizQuestion = {
   options: string[];
   correctAnswer: string;
 };
+type QuizState = {
+  quizDetail: {
+    quizId: string;
+    quizState: QuizQuestion[];
+  };
+};

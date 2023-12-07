@@ -1,11 +1,11 @@
 import prisma from "@/app/utils/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
+export const POST = async (req: Request, res: NextApiResponse) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password } = await req.json();
     const user = await prisma.user.findFirst({ where: { email } });
 
     if (user) {
