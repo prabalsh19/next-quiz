@@ -9,9 +9,12 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import React from "react";
 
 const Signup = () => {
+  const { data: session, status } = useSession();
+  console.log(session, status);
   const handleSubmit = () => {};
   return (
     <form
