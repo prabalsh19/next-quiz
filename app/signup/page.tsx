@@ -9,7 +9,7 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import React from "react";
 
 const Signup = () => {
@@ -45,6 +45,7 @@ const Signup = () => {
         >
           Submit
         </Button>
+
         <FormHelperText mt={{ base: "3" }}>
           Already have an account. <Link href={"/"}>Signin</Link>{" "}
         </FormHelperText>

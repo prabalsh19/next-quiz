@@ -9,6 +9,8 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Login = () => {
@@ -16,12 +18,18 @@ const Login = () => {
     username: "",
     password: "",
   });
+  const { status } = useSession();
+  const router = useRouter();
 
   const handleSubmit = () => {};
 
   const handleInputChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
+
+  if (status === "authenticated") {
+    router.push("/quiz");
+  }
 
   return (
     <form
@@ -52,6 +60,24 @@ const Login = () => {
           type="submit"
         >
           Login
+        </Button>
+        <br />
+        <Button
+          colorScheme="yellow"
+          variant="outline"
+          onClick={() => signIn("github")}
+          mt={{ base: "5" }}
+        >
+          Sign In With Github
+        </Button>
+        <br />
+        <Button
+          colorScheme="yellow"
+          variant="outline"
+          onClick={() => signIn("google")}
+          mt={{ base: "5" }}
+        >
+          Sign In With Google
         </Button>
         <FormHelperText mt={{ base: "3" }}>
           Don{"'"}t have an account. <Link href={"/signup"}>Signup</Link>{" "}
