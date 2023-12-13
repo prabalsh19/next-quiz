@@ -9,19 +9,36 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { status } = useSession();
   const router = useRouter();
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      const response = await axios.post("/api/login", formData);
+      if (response.status === 200) {
+        router.push("/quiz");
+      }
+    } catch (e) {
+      setError("Something went wrong. Please try again");
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleInputChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -40,11 +57,11 @@ const Login = () => {
         Sign In
       </Heading>
       <FormControl>
-        <FormLabel>Username</FormLabel>
+        <FormLabel>Email</FormLabel>
         <Input
-          type="text"
+          type="email"
           mb={{ base: "1rem" }}
-          onChange={(e) => handleInputChange("username", e.target.value)}
+          onChange={(e) => handleInputChange("email", e.target.value)}
         />
         <FormLabel>Password</FormLabel>
         <Input
@@ -52,8 +69,9 @@ const Login = () => {
           onChange={(e) => handleInputChange("password", e.target.value)}
         />
 
+        {error && <p className="text-red-700 mt-2 -mb-2">{error}</p>}
         <Button
-          isLoading={false}
+          isLoading={isLoading}
           mt={{ base: "5" }}
           colorScheme="yellow"
           variant="outline"
