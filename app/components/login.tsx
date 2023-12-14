@@ -13,6 +13,8 @@ import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setIsAuthenticated } from "../redux/slices/auth";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,8 +23,10 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const { status } = useSession();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -31,6 +35,7 @@ const Login = () => {
       const response = await axios.post("/api/login", formData);
       if (response.status === 200) {
         router.push("/quiz");
+        dispatch(setIsAuthenticated(true));
       }
     } catch (e) {
       setError("Something went wrong. Please try again");
