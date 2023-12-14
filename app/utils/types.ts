@@ -1,5 +1,6 @@
 type QuizQuestion = {
   id: number;
+  quizName: string;
   question: string;
   options: string[];
   correctAnswer: string;

@@ -36,6 +36,7 @@ model Question{
 
 model Quiz{
   id String @id @default(auto()) @map("_id") @db.ObjectId
+  quizName String
   questions Question[]
   active Boolean @default(false)
 }

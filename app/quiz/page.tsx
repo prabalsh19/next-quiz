@@ -1,10 +1,16 @@
-"use client";
 import { Heading, Select } from "@chakra-ui/react";
-import { useState } from "react";
 import Navbar from "../components/navbar";
 
-const Quiz = () => {
-  const [quizList, setQuizList] = useState();
+async function getData() {
+  const res = await fetch("http://localhost:3000/api/quiz", {
+    cache: "force-cache",
+  });
+  return res.json();
+}
+
+const Quiz = async () => {
+  const quizData = await getData();
+
   return (
     <>
       <Navbar />
@@ -14,9 +20,11 @@ const Quiz = () => {
         </Heading>
         <br />
         <Select placeholder="Select option" className=" bg-white">
-          <option value="option1">Python</option>
-          <option value="option2">DBMS</option>
-          <option value="option3">Software Engineering</option>
+          {quizData.quizes.map((quiz: QuizQuestion) => (
+            <option key={quiz.id} value="option1">
+              {quiz.quizName}
+            </option>
+          ))}
         </Select>
         <button className="btn-grad mt-5">Start Quiz</button>
       </div>

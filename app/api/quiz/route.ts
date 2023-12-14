@@ -22,9 +22,10 @@ export const GET = async () => {
 
 export const POST = async (req: Request) => {
   try {
-    const { questions } = await req.json();
+    const { quizName, questions } = await req.json();
     const response = await prisma.quiz.create({
       data: {
+        quizName,
         questions: {
           create: questions.map((q: Question) => ({
             question: q.question,
